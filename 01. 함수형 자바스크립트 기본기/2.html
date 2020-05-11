@@ -2,20 +2,26 @@
 
 # 일급 함수
 - 함수가 값으로 다뤄질 수 있다.
+- ex) const add10 = a => a + 1 
+      add10이라는 값에 함수가 할당됨
 
 # 고차 함수
 - 함수를 값으로 다루는 함수
+1. 함수를 인자로 받아서 실행
+2. 함수를 리턴
 
 ## 함수를 인자로 받아서 실행하는 함수
 - apply1
 - times
 
 <script>
+//  함수를 인자로 받음. 함수를 받아서 안에서 실행해주고 있음
   const apply1 = f => f(1);
   const add2 = a => a + 2;
   log(apply1(add2));
   log(apply1(a => a - 1));
 
+  // 함수와 숫자를 받아서 실행
   const times = (f, n) => {
     let i = -1;
     while (++i < n) f(i);
@@ -30,6 +36,8 @@
 - addMaker
 
 <script>
+// b => a + b : 이 함수는 함수이자, a를 기억하는 클로저
+// addMaker : 함수를 만들어 리턴하는 함수 : for 클로저
   const addMaker = a => b => a + b;
   const add10 = addMaker(10);
   log(add10(5));
