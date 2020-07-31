@@ -1,0 +1,72 @@
+<script>
+    let nn ;
+    let arr ;
+    let answer = []
+    let g_flag = false
+
+    const map = {0:1, 1:2, 2:4}
+
+
+function solution(n) {
+    flag = true
+    let nnn = 1
+    let sum = 0
+    let cnt ;
+    while(flag) {
+        if(n <= Math.pow(3,nnn) + sum) {
+            flag = false
+            // 범위 안에 들어오면 계산..
+            cnt = n-sum
+            nn = nnn 
+            console.log("cnt ", cnt , '  nn', nn );
+            break
+            
+        } else {
+            sum += Math.pow(3,nnn)
+            nnn++
+        }
+    }
+    arr = new Array(nn)
+    arr.fill(0,0, nn)
+    rec(0, arr, 0, cnt)
+    let test = cal(answer)
+    return test
+
+
+}
+
+    function rec(cnt, arr, index,cntFin) {
+        cnt++
+        if(cnt === cntFin && !g_flag) {
+            g_flag = true
+            answer = [...arr]
+            return false
+        } else if(g_flag) {
+            return false
+        } else {
+            if(arr[index] === 2) {
+                // index 위로 올리기 
+                while(true) {
+                    if(arr[index] < 2) {
+                        arr[index]++
+                        break
+                    } else {
+                        arr[index] = 0 
+                        index++
+                    }
+                }
+                rec(cnt, arr, 0, cntFin)
+            }else {
+                arr[index]++
+                rec(cnt,arr, index, cntFin)
+            }
+        }
+    }
+
+    function cal(arr) {
+        let resultStr = ""
+        arr.forEach(element => {
+            resultStr = map[element] + resultStr
+        });
+    }
+</script>

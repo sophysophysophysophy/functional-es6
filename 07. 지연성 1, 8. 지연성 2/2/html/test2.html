@@ -1,0 +1,27 @@
+<script>
+
+function solution(heights) {
+    var answer = [];
+    
+    heights.forEach((e, index) => {
+        console.log(e, index)
+      let now_height = heights[index]
+      let sub_array = heights.slice(0, index)
+      let sub_answer = 0 
+
+      sub_array.reverse()
+      console.log(sub_array)
+      sub_array.some((sub_e, sub_idx)=> {
+          if(sub_e > e) {
+              sub_answer = sub_idx+1
+              return true
+          }
+      })
+      answer.push(sub_answer)
+    })
+    return answer
+}
+
+
+
+</script>
