@@ -25,3 +25,52 @@ function solution(heights) {
 
 
 </script>
+
+<script>
+function solution2(s) {
+    let answer = [];
+    const chk = /[A-Z]/
+    let arr1 = s.split("")
+    let arr2 = arr1.filter(e => chk.test(e)) 
+    arr1 = arr1.filter(e => !chk.test(e))
+
+    let sortFunc = (a,b)=> {
+        return (a < b) - (a > b)
+    }
+    arr1.sort(sortFunc)
+    arr2.sort(sortFunc)
+
+    answer = [...arr1, ...arr2]
+
+
+    
+    return answer.join("");
+}
+
+
+</script>
+
+<script>
+    function solution3(a, b) {
+        if(a === b) return a 
+
+        let large = a > b ? a : b 
+        let small = a < b ? a : b 
+
+        n = large - small + 1
+
+        a + b 
+
+    }
+</script>
+
+
+<script>
+    const s =  "sdfEFDDfd"
+    s = s.toLowerCase()
+    s = s.split("")
+    let pCnt =  s.filter(e => e === 'p')
+    let yCnt = s.filter(e => e === 'y')
+    let answer  = pCnt === yCnt ? true : false
+    return answer 
+</script>

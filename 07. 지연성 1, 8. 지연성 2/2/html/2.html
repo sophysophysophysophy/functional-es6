@@ -175,13 +175,21 @@
 
 ## 결과를 만드는 함수 reduce, take
 
-### reduce
-
+### reduce : 최종적으로 값을 생성함. map, filter 계열의 함수를 연속적으로 사용하다가 특정 단계에서 연산을 깨뜨리는 함수 
+            최종적으로 값을 만들어서 return 하겠다라고 사고하고 코딩을 진행하면 구조적으로 코딩이 가능
+###  take 또한 지연성을 갖기 보다는 최종 필요한 단계에서 필요한 횟수만큼 실행하면 좋은 함수 
+    지연성(map,filter)와 어우러져서 코딩 
 <script>
+  // reduce 예제 
+  // queryString 으로 만들어주는 함수 
+   
   L.entries = function* (obj) {
     for (const k in obj) yield [k, obj[k]];
   };
 
+// Array.prototype.join보다 다형성이 높은 join함수 : reduce를 통해서 더 다형성 높게 생성 해보자
+// Array.prototype.join : 프로토타입에 정의되어있는 자료구조에서만 사용 가능(반드시 배열이어야만 가능). but, 생성 join은 이터레이터를 이용하기 때문에
+// 배열이 아니어도 사용 가능...!!!  
   const join = curry((sep = ',', iter) =>
     reduce((a, b) => `${a}${sep}${b}`, iter));
 
@@ -203,6 +211,7 @@
 </script>
 
 ### take, find
+find : take를 이용하여 결론을 만드는 함수 
 
 <script>
   const users = [
@@ -221,7 +230,7 @@
     L.filter(f),
     take(1),
     ([a]) => a));
-
+ 
   log(find(u => u.age < 30)(users));
 
   go(users,
