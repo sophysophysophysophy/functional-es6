@@ -1,3 +1,9 @@
+<html>
+  <body>
+    test
+  </body>
+</html>
+
 <script>const log = console.log;</script>
 
 <script>
@@ -41,21 +47,28 @@
 
   log(map(p => p.price, products));
 
+console.clear()
 </script>
 
 # 이터러블 프로토콜을 따른 map의 다형성
 
 <script>
+  // array에 값을 수집해서 map을 통해 무언가를 할 수 있음. 
   log([1, 2, 3].map(a => a + 1));
 
+  // 하지만 querySelector는 array를 상속받지 않기 때문에 map 함수가 protoType에 정의되어 있지 않아 불가능함 
+  // log(document.querySelectorAll('*').map(el => el.nodeNames))
+
+  // querySelector가 이터러블 프로토콜을 따르기 때문에 map함수 사용 가능, 순회 가능한 것! 
+  // map() : 이터러블 프로토콜  과 array.map : array의 프로토타입 함수  의 차이점 중요 ...! 
   log(map(el => el.nodeName, document.querySelectorAll('*')));
 
-  // const it = document.querySelectorAll('*')[Symbol.iterator]();
-  // log(it.next());
-  // log(it.next());
-  // log(it.next());
-  // log(it.next());
-  // log(it.next());
+  const it = document.querySelectorAll('*')[Symbol.iterator]();
+  log(it.next());
+  log(it.next());
+  log(it.next());
+  log(it.next());
+  log(it.next());
 
   function* gen() {
     yield 2;
@@ -63,11 +76,23 @@
     yield 4;
   }
 
+  // 모든 것들을 map 가능하다. gen() 함수처럼 속에 로직을 삽입할 수 있기 때문에 
+  // 이터러블 프로토콜 따르면 헬퍼 함수와의 연결이 쉬워지고 다형성이 높아짐 
   log(map(a => a * a, gen()));
 
+  // Map : key value 형태의 자료구조 
   let m = new Map();
   m.set('a', 10);
   m.set('b', 20);
+
+  // 
+  // const it2 = m[Symbol.iterator]()
+  // log(it2.next())
+  // log(it2.next())
+
+
+  // Map : 이터러블 프로토콜 따르기에 map function 사용 가능 ㅋ
+  // 구조분해하여 키와 값을 받을 수 있음.
   log(new Map(map(([k, a]) => [k, a * 2], m)));
 
   console.clear();
@@ -76,7 +101,10 @@
 
 # filter
 
-<script>
+<script> 
+
+  // filter : 특정 값만 뽑아내거나, 제외할 수 있는 함수 (함수형적인 코딩)
+  // 첫 인자 : 보조함수. 두번째 인자 : 값 
   const filter = (f, iter) => {
     let res = [];
     for (const a of iter) {
@@ -85,11 +113,11 @@
     return res;
   };
 
-  // let under20000 = [];
-  // for (const p of products) {
-  //   if (p.price < 20000) under20000.push(p);
-  // }
-  // log(...under20000);
+  let under20000 = [];
+  for (const p of products) {
+    if (p.price < 20000) under20000.push(p);
+  }
+  log(...under20000);
 
   log(...filter(p => p.price < 20000, products));
 
@@ -117,14 +145,20 @@
 # reduce
 
 <script>
+
+  // reduce : 값을 축약해나가는 함수 
   const nums = [1, 2, 3, 4, 5];
 
+  // 우선 명령형 코드는 이렇게 작성된다.
+  // 원하는 값을 위해 for문을 돌려 로직 작성하는 방식
   let total = 0;
   for (const n of nums) {
     total = total + n;
   }
   log(total);
 
+  // 함수형 코드
+  // 보조함수, 초기값, 이터
   const reduce = (f, acc, iter) => {
     if (!iter) {
       iter = acc[Symbol.iterator]();
@@ -141,9 +175,11 @@
   log(reduce(add, 0, [1, 2, 3, 4, 5]));
   // 15
 
+  // reduce는 내부적으로 이런식으로 재귀적으로 동작해야함. 이렇게 구현하면 됨 
   log(add(add(add(add(add(0, 1), 2), 3), 4), 5));
   // 15
 
+  // 시작하는 값 생략하면 내부적으로 첫번째값을 꺼내서 기본값으로 세팅되어 동작
   log(reduce(add, [1, 2, 3, 4, 5]));
   // 15
 
@@ -151,6 +187,8 @@
 </script>
 
 <script>
+  // 숫자뿐 아니라 복잡한 값 또한 reduce로 계산 가능함 ! 
+  
   log(
     reduce(
       (total_price, product) => total_price + product.price,

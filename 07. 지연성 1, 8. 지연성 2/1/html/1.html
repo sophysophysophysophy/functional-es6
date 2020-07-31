@@ -5,6 +5,7 @@
 <script>
   var add = (a, b) => a + b;
 
+  // 간단한 range : 숫자를 받고 배열을 리턴하는 함수 
   const range = l => {
     let i = -1;
     let res = [];
@@ -14,25 +15,45 @@
     return res;
   };
 
+  // range함수 실행 후 바로 배열로 완전히 평가가 됨 
   var list = range(4);
   log(list);
   log(reduce(add, list));
+
+  console.clear()
 </script>
 
 ## 느긋한 L.range
 
 <script>
   const L = {};
+// 이터레이터를 만드는 제너레이터 함수 선언 
+// 순회하지 않고 var list = L.range(4); 으로 만들어도 내부 로그는 찍히지 않음. 루프를 돌지 않는다는 의미 ,,, 함수의 어떤 부분도 실행되지 않음 
+// 이터레이터의 내부를 순회할때마다 하나씩 같이 평가가 됨 
+// ex) log(list.next().value) 등으로 내부 순회해야먄 평가가 됨 
   L.range = function* (l) {
+    // log('hi!')
     let i = -1;
     while (++i < l) {
+      // log(i, 'L.lange')
       yield i;
     }
   };
 
   var list = L.range(4);
+  // 내부 로그 x
   log(list);
+
+  // 내부 로그 o
+  log(list.next())
+
+
+  // 이 때 필요한 값을 하나씩 꺼내서 호출하게 됨 (값이 호출되기 때문에 내부 로그 o)
+  // 이전 range는 리스트 순회 후 reduece 안에서 이터레이터 생성 후 순회. 느긋한 range 함수는 이터레이터 생성 후 reduce 함수 실행되면서 순회하기 때문에
+  // 아주 조금 더 효율적이라고 볼 수 있다.
   log(reduce(add, list));
+
+  console.clear()
 </script>
 
 <script>
@@ -41,9 +62,8 @@
     while (time--) f();
     console.timeEnd(name);
   }
-
-  // test('range', 10, () => reduce(add, range(1000000)));
-  // test('L.range', 10, () => reduce(add, L.range(1000000)));
+  test('range', 10, () => reduce(add, range(1000000)));
+  test('L.range', 10, () => reduce(add, L.range(1000000)));
   console.clear();
 </script>
 
@@ -58,6 +78,16 @@
     }
     return res;
   });
+
+
+  // range는 1000000의 list를 만들고, take로 5개의 값을 만들지만
+  // L.range는 100000 만든다고 선언하지만 직접 값을 호출하는 take에서 값에 접근하기 때문에 5개의 value만 호출하여 더 효율적 
+// 무한 수열을 만들어도 어차피 5개의 값만 만들기 떄문에 브라우저에 무리가 가지 않음 
+
+  // log(take(5, range(1000000)))
+  // log(take(5, L.range(1000000)))
+  // log(take(5, L.range(Infinity)))
+
   console.time('');
   go(
     range(10000),
