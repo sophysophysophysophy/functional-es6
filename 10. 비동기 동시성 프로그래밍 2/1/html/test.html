@@ -1,0 +1,32 @@
+<script>
+function solution(s) {
+    // 차례로 압축해보면서 가장 짧아지는 경우 찾기 (완전 탐색)
+    let length = s.length
+    let min_length = length
+    for(let i = 1; i < length; i++) {
+        let start = 0
+        let cnt = 1 
+
+        // init
+        let beforeChar = s.substr(start,i)
+        start += i
+        let now_string = ''
+        while(start <= length) {
+            let now =  s.substr(start,i)
+            if(beforeChar === now) cnt++
+            else {
+                now_string += cnt > 1 ? cnt+beforeChar : beforeChar
+                beforeChar = now
+                cnt = 1
+            }
+            if(start+i > length) now_string += s.substr(start)
+            start += i
+            
+        }
+        min_length = min_length > now_string.length ? now_string.length : min_length
+        console.log(now_string)
+    }
+    return min_length
+
+}
+</script>

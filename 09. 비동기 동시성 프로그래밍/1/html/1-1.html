@@ -19,6 +19,14 @@
 
   // log(a);
 
+
+  // promise - 인자 하나만 받음. callback 함수를 따로 인자로 받지는 않음
+  // promise를 만들어서 return한다는 점이 굉장히 중요한 점
+  // callback패턴보다 직관적으로 작성 가능 : promise의 장점 (콜백지옥에서 벗어날 수 있음 )
+  // 하지만 then 메서드 보다, 일급으로 비동기 상황을 다룬다는 것이 promise의 가장 큰 특징
+  // 비동기 상황에서 값을 만들어 return한다는 점이 가장 큰 장점인 것 ! 
+  // promise가 리턴되기 때문에 원하는 값을 다룰 수 있음. 결과를 통해 then을 이용하여 작업을 연결지어 해나갈 수 있음 
+  // 비동기 상황이 코드가 아닌, 값으로써 다뤄지는 것 ==> 일급이라는 이야기 ==> 어떤 변수에 할당될 수도 있고, 어떤 함수에 전달될 수 있어 계속 일을 이어갈 수 있는것..
   function add20(a) {
     return new Promise(resolve => setTimeout(() => resolve(a + 20), 100));
   }
@@ -50,18 +58,30 @@
 ## Composition
 
 <script type="module">
+  // 함수 합성 
   // f . g
   // f(g(x))
 
+  // 안전하게 함수를 합성하기 위한 개념, 도구 : 모나드 
+  // 비동기 상황을 안전하게 합성하기 위한 것 :promise
+  
   const g = a => a + 1;
   const f = a => a * a;
 
+  // 유의미한 값. 정상동작 
   // log(f(g(1)));
+
+  // g에게 원하는 값이 오지 않을 때 NaN이 출력됨. 함수 합성이 안전한 인자만 오지 않음
+  // 어떠한 값이 올지 모르는 상황에서 안전한 함수 합성하는 것 : 모나드
   // log(f(g()));
 
+
+  // 모나드 개념 적용
+  // map을 통해 array로 함수 함성하게 되면 안전하게 함수가 합성됨
   Array.of(1).map(g).map(f)/*.forEach(r => log(r))*/;
   [].map(g).map(f)/*.forEach(r => log(r))*/;
 
+  // promise -> 비동기 상황에서 안전하게 함수 합성을 하는 도구. 대기가 일어나는 상황에서의 값을 안전하게 굴러갈 수 있게..
   Promise.resolve(2).then(g).then(f)/*.then(r => log(r))*/;
   new Promise(resolve =>
     setTimeout(() => resolve(2), 100)
@@ -69,6 +89,7 @@
 </script>
 
 ## Kleisli Composition
+오류가 있는 상황에서의 함수 합성을 안전하게 진행할 수 있도록 도와주는 도구 
 
 <script>
   // f . g

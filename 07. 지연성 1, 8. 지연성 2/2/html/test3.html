@@ -1,0 +1,12 @@
+<script>
+function solution(d, budget) {
+    d.sort()
+    let answer = 0 
+    d.some(e => {
+        budget -= e 
+        if(budget < 0) return true
+        answer++
+    })
+    return answer
+}
+</script>
